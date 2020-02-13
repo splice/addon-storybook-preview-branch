@@ -1,18 +1,57 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { addons, types } from '@storybook/addons';
 import styled from '@emotion/styled';
-
 import { ADDON_ID } from './constants';
-// import { BackgroundSelector } from './containers/BackgroundSelector';
-// import { GridSelector } from './containers/GridSelector';
 
 const Label = styled.label`
-  color: hotpink;
+  margin-right: 5px;
 `;
 
-// const style = css`
-//   color: hotpink;
-// `;
+const Form = styled.form`
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+`;
+
+const Input = styled.input`
+  border-radius: 3px;
+  border: 1px solid #eee;
+  padding: 3px 5px;
+`;
+
+/**
+ * Gets a cookie by name.
+ * @param name The name of the target cookie
+ */
+function getCookie(name: string): string | undefined {
+  const cookies: { [key: string]: string } = {};
+  document.cookie
+    .split(';')
+    .map(cookie => cookie.split('=').map(part => part.trim()))
+    .forEach(cookie => {
+      cookies[cookie[0]] = cookie[1];
+    });
+  return cookies[name];
+}
+
+/**
+ * Gets the saved branch name from the cookie or returns the default branch.
+ */
+function getSavedBranch() {
+  return getCookie('branch') || 'master';
+}
+
+let currentValue = getSavedBranch();
+
+/**
+ * When the branch form is submitted. Saves the new value into the cookie and
+ * refreshes the page.
+ */
+function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+  document.cookie = `branch=${currentValue};path=/`;
+  location.href = location.href;
+}
 
 addons.register(ADDON_ID, api => {
   addons.add(ADDON_ID, {
@@ -20,10 +59,15 @@ addons.register(ADDON_ID, api => {
     type: types.TOOL,
     match: ({ viewMode }) => viewMode === 'story',
     render: () => (
-      <form>
+      <Form onSubmit={onSubmit}>
         <Label htmlFor="preview-branch">Branch:</Label>
-        <input id="preview-branch" type="text" defaultValue="hello" />
-      </form>
+        <Input
+          id="preview-branch"
+          type="text"
+          defaultValue={currentValue}
+          onChange={event => (currentValue = event.target.value.trim())}
+        />
+      </Form>
     ),
   });
 });
