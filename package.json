@@ -1,31 +1,29 @@
 {
-  "private": true,
   "name": "@splice/addon-storybook-preview-branch",
   "version": "1.0.0",
   "description": "",
   "main": "register.js",
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:watch": "tsc -w"
   },
   "author": "",
   "license": "UNLICENSED",
   "devDependencies": {
-    "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
     "@storybook/addons": "^5.3.13",
     "@types/node": "^13.7.1",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
-    "babel-plugin-emotion": "^10.0.27",
     "prettier": "^1.19.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "source-map-loader": "^0.2.4",
-    "ts-loader": "^6.2.1",
-    "typescript": "^3.7.5",
-    "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11"
+    "typescript": "^3.7.5"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "peerDependencies": {
+    "@emotion/styled": "^10.0.27",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  }
 }

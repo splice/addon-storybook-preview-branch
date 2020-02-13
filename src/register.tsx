@@ -1,6 +1,6 @@
-import React from 'react';
-import { addons, types } from '@storybook/addons';
 import styled from '@emotion/styled';
+import { addons, types } from '@storybook/addons';
+import React from 'react';
 import { ADDON_ID } from './constants';
 
 const Label = styled.label`
@@ -42,7 +42,6 @@ function getSavedBranch() {
 }
 
 let currentValue = getSavedBranch();
-
 /**
  * When the branch form is submitted. Saves the new value into the cookie and
  * refreshes the page.
