@@ -7,8 +7,8 @@
     "build": "tsc",
     "build:watch": "tsc -w"
   },
-  "author": "",
-  "license": "UNLICENSED",
+  "author": "Splice",
+  "license": "MIT",
   "devDependencies": {
     "@emotion/styled": "^10.0.27",
     "@storybook/addons": "^5.3.13",
