@@ -12,13 +12,43 @@ To change the branch you enter the branch you want into the input and press retu
 
 This addons depends on some infrastructure to allow for different branches to be served.
 
-1. Storybook should be served from a static file server out of branch-specific sub-directories. For example:
+1. Storybook should be served from a static file server out of branch-specific sub-directories, each with their own Storybook builds. For example:
     * `master`
     * `staging`
     * `<username>/feature-name`
 1. CI should exist to automatically push branches into the static server's sub-directories.
 1. A proxy must exist in front of the static server (or the static server must implement it) to route incoming HTTP requests to sub-directories based on the `branch` cookie (not an HTTP-Only cookie!). If the cookie is not set it should use the default branch (likely `master`).
 1. The proxy should serve all assets with `Cache-Control: no-cache` to ensure the target branch content is served whenever the value of the `branch` cookie changes.
+
+### Our Specific Example
+
+* We have a bucket in S3 dedicated to design system (ie, `storybook.example.com`). The bucket is configured to operate as a static web server.
+* Our CI builds Storybook Pull Request (as well as the `master` branch) and uploads it to a folder in the bucket named after the branch (ie, `storybook.example.com/dandean/8786/my-feature`)
+* We have nginx which receives requests for `storybook.example.com` and proxies them to S3. _Before_ the requests are proxied nginx looks for the cooke and rewrites the request to the target directory in the bucket. Our nginx config looks something like this:
+
+```conf
+location / {
+    # Disable HTTP Caching
+    expires -1;
+
+    # If cookie named branch is not set, use `master`...
+    if ($cookie_branch = "") {
+        # If found, use value to prefix URL and rewrite:
+        rewrite (.*) /master$1 break;
+    }
+
+    # ...if cookie named "branch" set, use it...
+    if ($cookie_branch) {
+        # If found, use value to prefix URL and rewrite:
+        rewrite (.*) /$cookie_branch$1 break;
+    }
+
+    # Proxy all requests to the static host.
+    proxy_pass http://storybook.example.com.s3-website-us-west-1.amazonaws.com;
+}
+```
+
+With this infrastructure in place this addon reads the cookie and reflects its value into the input. When the form is submitted the cookie is updated, the page is refreshed, and the proxy serves the new target branch.
 
 ## Development and Publishing Workflow
 
