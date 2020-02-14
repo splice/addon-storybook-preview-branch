@@ -31,6 +31,13 @@ location / {
     # Disable HTTP Caching
     expires -1;
 
+    # If the branch query param exists (ex: ?branch=<branch>) then pass
+    # that value into a cookie and redirect to the bare hostname:
+    if ($arg_branch) {
+        add_header Set-Cookie "branch=$arg_branch; Path=/" always;
+        return 302 $scheme://$host;
+    }
+
     # If cookie named branch is not set, use `master`...
     if ($cookie_branch = "") {
         # If found, use value to prefix URL and rewrite:
