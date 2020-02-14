@@ -1,5 +1,7 @@
 # @splice/addon-storybook-preview-branch
 
+<img width="1056" alt="addon-preview-branch" src="https://user-images.githubusercontent.com/18332/74503402-a4392400-4ea5-11ea-9c7c-0dbb7d0fc001.png">
+
 This module is a Storybook addon for presenting and modifying the current Preview Branch of Storybook being viewed.
 
 The UI is a text input in the Storybook toolbar which contains the name of the branch currently being viewed.
