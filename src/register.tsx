@@ -34,21 +34,19 @@ function getCookie(name: string): string | undefined {
   return cookies[name];
 }
 
-/**
- * Gets the saved branch name from the cookie or returns the default branch.
- */
-function getSavedBranch() {
-  return getCookie('branch') || 'master';
-}
+let currentValue = getCookie('branch') || '';
 
-let currentValue = getSavedBranch();
 /**
  * When the branch form is submitted. Saves the new value into the cookie and
  * refreshes the page.
  */
 function onSubmit(event: React.FormEvent<HTMLFormElement>) {
   event.preventDefault();
-  document.cookie = `branch=${currentValue};path=/`;
+  let cookie = `branch=${currentValue};path=/`;
+  if (currentValue.trim() === '') {
+    cookie = `${cookie};expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+  }
+  document.cookie = cookie;
   location.href = location.href;
 }
 
@@ -63,6 +61,7 @@ addons.register(ADDON_ID, api => {
         <Input
           id="preview-branch"
           type="text"
+          placeholder="default branch"
           defaultValue={currentValue}
           onChange={event => (currentValue = event.target.value.trim())}
         />
