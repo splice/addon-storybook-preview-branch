@@ -1,13 +1,14 @@
 {
   "name": "@splice/addon-storybook-preview-branch",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "register.js",
   "scripts": {
     "build": "tsc",
+    "prepare": "tsc",
     "build:watch": "tsc -w"
   },
-  "author": "Splice",
+  "author": "Splice,DaveMiscampbell",
   "license": "MIT",
   "devDependencies": {
     "@emotion/styled": "^10.0.27",
